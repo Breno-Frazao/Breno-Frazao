@@ -1,1 +1,1 @@
-<img src="pokemon space GIF.gif" width="20%" />
+<img src="pokemon space GIF.gif" width="80%" />
