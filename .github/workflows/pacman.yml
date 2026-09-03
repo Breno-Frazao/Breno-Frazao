@@ -2,23 +2,32 @@ name: Generate Pac-Man contribution graph
 
 on:
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "0 */12 * * *"
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  generate:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Generate Pac-Man
-        uses: pencilrebel/pacman-contribution-graph@main
-        with:
-          github_user_name: ${{ github.repository_owner }}
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Push generated files
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Generate Pac-Man
+        run: |
+          node src/generate.mjs \
+            --user "${{ github.repository_owner }}" \
+            --out dist
+
+      - name: Publish Pac-Man
         uses: crazy-max/ghaction-github-pages@v4
         with:
           build_dir: dist
